@@ -1,0 +1,41 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$SCRIPT_DIR"
+
+source ./framework/backend/setup_functions.sh 2>/dev/null || true
+
+build_server() {
+  echo -e "\n-- building server to dist ---\n"
+  npm run build
+
+  # Add .js extension to relative imports for Node.js ESM compatibility
+  echo "Adding .js extensions to imports..."
+  find ./dist -name "*.js" -exec sed -i -E "s/from '(\.[^']+)'/from '\1.js'/g" {} \;
+  find ./dist -name "*.js" -exec sed -i -E "s/from \"(\.[^\"]+)\"/from \"\1.js\"/g" {} \;
+
+  # Copy non-TS assets to dist
+  echo "Copying assets..."
+  mkdir -p ./dist/app/src/assets
+  cp -r ./app/src/assets/* ./dist/app/src/assets/
+
+  mkdir -p ./dist/app/src/view
+  cp -r ./app/src/view/* ./dist/app/src/view/
+
+  echo "Server build complete: ./dist"
+}
+
+start_server() {
+  local dirs=("./pure" "./framework/backend")
+
+  if type setup_dependencies &>/dev/null; then
+    setup_dependencies "${dirs[@]}"
+  fi
+
+  build_server
+
+  echo -e "\n-- starting server ---\n"
+  bun start
+}
+
+start_server

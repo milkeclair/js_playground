@@ -1,0 +1,26 @@
+{
+  "name": "js_playground",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "start": "node ./dist/app/app.js",
+    "start:dev": "nodemon -e ts,js,ejs,html,css,scss --ignore 'node_modules/' --exec 'tsx ./app/app.ts'",
+    "dev": "tsx watch ./app/app.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^24.10.1",
+    "nodemon": "^3.1.11",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10"
+  }
+}

@@ -1,0 +1,58 @@
+.ly_showContainer * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  border: 2px solid transparent;
+  background-color: white;
+
+  &::before {
+    position: absolute;
+    top: -23px;
+    left: -2px;
+    max-width: 100px;
+    height: 23px;
+    font-size: 16px;
+    font-weight: normal;
+    padding: 0 5px;
+    color: white;
+  }
+
+  &.un_body {
+    margin: 20px;
+    padding: 50px 100px;
+    border-color: black;
+
+    &::before {
+      content: "body";
+      background-color: black;
+    }
+  }
+
+  &.un_div {
+    border-color: red;
+
+    &::before {
+      content: "div";
+      background-color: red;
+    }
+  }
+
+  &.un_h1 {
+    border-color: green;
+
+    &::before {
+      content: "h1";
+      background-color: green;
+    }
+  }
+
+  &.un_p {
+    border-color: blue;
+
+    &::before {
+      content: "p";
+      background-color: blue;
+    }
+  }
+}
