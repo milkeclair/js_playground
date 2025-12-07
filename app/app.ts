@@ -18,12 +18,12 @@ function App() {
     c.res.html('<a href="/home">Go to Home</a>');
   });
 
-  s.get('/api/hello', (c) => {
-    c.res.json({ message: 'Hello, World!' });
-  });
-
   s.get('/home', (c) => {
     c.res.render({ template: 'compare_code', params: { message: 'Welcome!', title: 'Home' } });
+  });
+
+  s.get('/nested/hello', (c) => {
+    c.res.render({ params: { message: 'Nested view test' } });
   });
 
   s.get('/users/:id', (c) => {
@@ -37,16 +37,12 @@ function App() {
     c.res.json({ query: c.req.query });
   });
 
+  s.get('/api/hello', (c) => {
+    c.res.json({ message: 'Hello, World!' });
+  });
+
   s.post('/api/data', (c) => {
     c.res.status(201).json({ created: true, received: c.req.body });
-  });
-
-  s.get('/404', (c) => {
-    c.res.status(404).render({ params: { message: 'Page Not Found!!!' } });
-  });
-
-  s.get('/nested/hello', (c) => {
-    c.res.render({ params: { message: 'Nested view test' } });
   });
 
   return s;
