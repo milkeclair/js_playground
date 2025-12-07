@@ -1,34 +1,56 @@
-import { Backend } from '../framework/backend/backend';
+import { Server } from '../framework/backend/server';
+
+const root = new URL('./src/', import.meta.url).pathname;
 
 function App() {
-  const appHome = new URL('./src/', import.meta.url).pathname;
-  const c = Backend({ appHome });
+  const s = Server({ root, allowed: { origins: ['http://example.com'] } });
 
-  c.get('/', (_req, res) => {
-    res.html('<a href="/home">Go to Home</a>');
+  let timer: ReturnType<typeof setTimeout>;
+  s.use((c) => {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      console.log(`Debounced log: ${c.req.method} ${c.req.url}`);
+    }, 500);
   });
 
-  c.get('/api/hello', (_req, res) => {
-    res.json({ message: 'Hello, World!' });
+  s.get('/', (c) => {
+    c.res.html('<a href="/home">Go to Home</a>');
   });
 
-  c.get('/home', (_req, res) => {
-    res.render('compare_code', { message: 'Welcome!' });
+  s.get('/api/hello', (c) => {
+    c.res.json({ message: 'Hello, World!' });
   });
 
-  c.get('/users/:id', (req, res) => {
-    res.render('compare_code', { message: `User ID: ${req.params.id}` });
+  s.get('/home', (c) => {
+    c.res.render({ template: 'compare_code', params: { message: 'Welcome!', title: 'Home' } });
   });
 
-  c.get('/search', (req, res) => {
-    res.json({ query: req.query });
+  s.get('/users/:id', (c) => {
+    c.res.render({
+      template: 'compare_code',
+      params: { message: `User ID: ${c.req.pathParams.id}`, title: 'User Profile' },
+    });
   });
 
-  c.post('/api/data', (_req, res) => {
-    res.status(201).json({ created: true });
+  s.get('/search', (c) => {
+    c.res.json({ query: c.req.query });
   });
 
-  return c;
+  s.post('/api/data', (c) => {
+    c.res.status(201).json({ created: true, received: c.req.body });
+  });
+
+  s.get('/404', (c) => {
+    c.res.status(404).render({ params: { message: 'Page Not Found!!!' } });
+  });
+
+  s.get('/nested/hello', (c) => {
+    c.res.render({ params: { message: 'Nested view test' } });
+  });
+
+  return s;
 }
 
-App().start();
+const app = App();
+app.start();

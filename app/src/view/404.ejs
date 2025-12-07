@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>404</title>
-  </head>
-
+<%- include(`${root}/view/layout_header`, { head: 'partial/_head', title: '404' }) %>
   <body>
     <h1>404</h1>
     <p><%= message %></p>
   </body>
-</html>
+<%- include(`${root}/view/layout_footer`) %>

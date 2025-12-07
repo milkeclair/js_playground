@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja" class="ly_showContainer">
-  <head>
-    <%- include(`${appHome}/view/partial/_head`) %>
-    <link rel="stylesheet" href="../assets/css/compare_code.css">
-  </head>
-
+<%- include(`${root}/view/layout_header`, { head: 'partial/_head', css: 'compare_code' }) %>
   <body class="un_body">
     <div class="un_div">
       <h1 class="un_h1">
@@ -16,4 +10,4 @@
       </p>
     </div>
   </body>
-</html>
+<%- include(`${root}/view/layout_footer`) %>

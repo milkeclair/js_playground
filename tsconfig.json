@@ -16,6 +16,6 @@
     "allowJs": true,
     "checkJs": false
   },
-  "include": ["framework/**/*.ts", "pure/**/*.ts", "pure/**/*.js", "app/app.ts"],
+  "include": ["framework/**/*.ts", "app/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
