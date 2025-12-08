@@ -21,6 +21,7 @@ export type ServerOptions = {
     ips?: string[];
     methods?: string[];
   };
+  routingType?: 'definitive' | 'filebase' | 'hybrid';
 };
 
 export type Modules = {

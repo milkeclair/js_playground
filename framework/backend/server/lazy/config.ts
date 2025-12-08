@@ -17,5 +17,9 @@ export function LazyConfig(modules: Modules) {
     get allowed() {
       return modules.config?.allowed;
     },
+
+    get routingType() {
+      return modules.config?.routingType;
+    },
   };
 }

@@ -61,11 +61,19 @@ export function Lifecycle({
     req: ReturnType<typeof Request>;
     res: ServerResponse;
   }): Promise<void> => {
-    if (await handleCustomRequest({ req, res })) {
+    if (modules.config.routingType === 'filebase') {
+      await modules.router.handle({ req, res });
       return;
-    } else {
-      modules.router.handle({ req, res });
     }
+
+    const handledCustom = await handleCustomRequest({ req, res });
+
+    if (modules.config.routingType === 'definitive') {
+      if (!handledCustom) modules.controller.action.notFound(req, res);
+      return;
+    }
+
+    if (!handledCustom) await modules.router.handle({ req, res });
   };
 
   const listenExit = () => {

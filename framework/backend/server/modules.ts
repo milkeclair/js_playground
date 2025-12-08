@@ -45,6 +45,7 @@ export function Modules(options: ServerOptions = {}): Modules {
       port: options.port,
       root: options.root,
       allowed: options.allowed,
+      routingType: options.routingType,
     },
   });
 

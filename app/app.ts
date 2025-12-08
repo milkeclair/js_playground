@@ -1,9 +1,12 @@
 import { Server } from '../framework/backend/server';
 
-const root = new URL('./src/', import.meta.url).pathname;
-
 function App() {
-  const s = Server({ root, allowed: { origins: ['http://example.com'] } });
+  const s = Server({
+    root: new URL('./src/', import.meta.url).pathname,
+    allowed: { origins: ['http://example.com'] },
+    port: 4000,
+    routingType: 'hybrid',
+  });
 
   let timer: ReturnType<typeof setTimeout>;
   s.use((c) => {

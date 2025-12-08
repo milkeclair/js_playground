@@ -1,22 +1,12 @@
 import { Router } from './router';
-
-type ConfigProps = {
-  host?: string;
-  port?: number;
-  root?: string;
-  allowed?: {
-    origins?: string[];
-    ips?: string[];
-    methods?: string[];
-  };
-};
+import type { ServerOptions } from './server';
 
 export function Config({
   router,
   configs = {},
 }: {
   router: ReturnType<typeof Router>;
-  configs?: ConfigProps;
+  configs?: ServerOptions;
 }) {
   const host = configs.host || 'localhost';
   const port = configs.port || 3000;
@@ -26,6 +16,7 @@ export function Config({
     ips: configs.allowed?.ips || ['::1', '127.0.0.1'],
     methods: configs.allowed?.methods || ['GET', 'POST', 'PUT', 'DELETE'],
   };
+  const routingType = configs.routingType || 'hybrid';
 
   router.draw({
     routes: {
@@ -46,6 +37,7 @@ export function Config({
     host,
     port,
     root,
+    routingType,
     allowed,
   };
 }
