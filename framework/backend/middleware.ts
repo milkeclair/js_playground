@@ -1,4 +1,5 @@
 import type { EnhancedRequest, EnhancedResponse } from './type';
+import { Combine } from './middleware/combine';
 
 export type MiddlewareHandler = (c: {
   req: EnhancedRequest;
@@ -19,9 +20,9 @@ export function Middleware() {
     req: EnhancedRequest;
     res: EnhancedResponse;
   }): Promise<void> => {
-    for (const middleware of middlewares) {
-      await middleware({ req, res });
-    }
+    const combined = Combine(middlewares);
+
+    await combined({ req, res });
   };
 
   return {

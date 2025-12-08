@@ -11,7 +11,7 @@ export function Lifecycle({
   modules: Modules;
   customRoutes: RouteDefinition[];
 }) {
-  const executeMiddlewares = async ({
+  const executeMiddleware = async ({
     req,
     res,
   }: {
@@ -86,5 +86,5 @@ export function Lifecycle({
     listenExit();
   };
 
-  return { start, executeMiddlewares, handleRequest };
+  return { start, executeMiddleware, handleRequest };
 }
