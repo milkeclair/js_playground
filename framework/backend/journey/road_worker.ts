@@ -2,7 +2,7 @@ import path from 'node:path';
 import { Logger } from '../logger';
 import { Lib } from '../lib';
 import type { Routes } from '../journey';
-import { Throttle } from './road_worker/throttle';
+import { RoadClosure } from './road_closure';
 
 export function RoadWorker({
   logger,
@@ -15,7 +15,7 @@ export function RoadWorker({
   allowedRoutes: Routes;
   extensionPaths: Record<string, string[]>;
 }) {
-  const throttle = Throttle();
+  const roadClosure = RoadClosure();
 
   const formatRoute = (filePath: string, extension: string) => {
     if (extension === '.html' || extension === '.ejs') {
@@ -58,9 +58,9 @@ export function RoadWorker({
   };
 
   const pavement = async (extensions: string[]) => {
-    if (!throttle.isReady()) return;
+    if (!roadClosure.isOpen()) return;
 
-    throttle.update();
+    roadClosure.close();
     logger.info.updatingAllowedRoutes();
 
     for (const extension of extensions) {
