@@ -67,6 +67,8 @@ export function Router({
     const handler = controller.action[actionName];
     if (handler) {
       handler(req, res);
+    } else {
+      controller.action.deliver({ req, res, mimeType: 'html' });
     }
   };
 
