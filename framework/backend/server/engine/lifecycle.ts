@@ -11,7 +11,7 @@ export function Lifecycle({
   modules: Modules;
   customRoutes: RouteDefinition[];
 }) {
-  const executeMiddleware = async ({
+  const carrySuitcase = async ({
     req,
     res,
   }: {
@@ -22,7 +22,7 @@ export function Lifecycle({
     const urlPath = req.uri.pathname;
     const enhancedRes = Response({ res, requestPath: urlPath, modules });
 
-    await modules.middleware.run({
+    await modules.suitcase.zip({
       req: parsedReq,
       res: enhancedRes,
     });
@@ -94,5 +94,5 @@ export function Lifecycle({
     listenExit();
   };
 
-  return { start, executeMiddleware, handleRequest };
+  return { start, carrySuitcase, handleRequest };
 }

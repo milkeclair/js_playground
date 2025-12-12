@@ -6,7 +6,7 @@ import { LazyLogger } from './lazy/logger';
 import { LazyInspector } from './lazy/inspector';
 import { LazyRenderer } from './lazy/renderer';
 import { LazyTrafficOfficer } from './lazy/traffic_officer';
-import { LazyMiddleware } from './lazy/middleware';
+import { LazySuitcase } from './lazy/suitcase';
 
 export function Lazy(modules: Modules) {
   return {
@@ -38,8 +38,8 @@ export function Lazy(modules: Modules) {
       return LazyTrafficOfficer(modules);
     },
 
-    get middleware() {
-      return LazyMiddleware(modules);
+    get suitcase() {
+      return LazySuitcase(modules);
     },
   };
 }

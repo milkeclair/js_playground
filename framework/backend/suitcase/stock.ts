@@ -3,7 +3,7 @@ import { Config } from '../config';
 import { Lib } from '../lib';
 import { MIME_TYPES } from '../traffic_officer';
 
-export function Builtin() {
+export function Stock() {
   return {
     cors: ({ config, lib }: { config: ReturnType<typeof Config>; lib: ReturnType<typeof Lib> }) => {
       return ({ req, res }: { req: EnhancedRequest; res: EnhancedResponse }): void => {

@@ -2,12 +2,12 @@ import type { RouteDefinition } from './type';
 import { Modules } from './server/modules';
 import { Engine } from './server/engine';
 import { Registrar } from './server/registrar';
-import { Builtin } from './middleware/builtin';
+import { Stock } from './suitcase/stock';
 import { Config } from './config';
 import { Journey } from './journey';
 import { TrafficOfficer } from './traffic_officer';
 import { Renderer } from './renderer';
-import { Middleware } from './middleware';
+import { Suitcase } from './suitcase';
 import { Logger } from './logger';
 import { Inspector } from './journey/inspector';
 import { Lib } from './lib';
@@ -31,7 +31,7 @@ export type Modules = {
   inspector: ReturnType<typeof Inspector>;
   renderer: ReturnType<typeof Renderer>;
   trafficOfficer: ReturnType<typeof TrafficOfficer>;
-  middleware: ReturnType<typeof Middleware>;
+  suitcase: ReturnType<typeof Suitcase>;
   lib: ReturnType<typeof Lib>;
 };
 
@@ -41,16 +41,16 @@ export function Server(options: ServerOptions = {}) {
   const modules = Modules(options);
   const engine = Engine({ modules, customRoutes });
   const registrar = Registrar({ customRoutes });
-  const builtin = Builtin();
+  const stock = Stock();
 
-  modules.middleware.use(builtin.cors({ config: modules.config, lib: modules.lib }));
-  modules.middleware.use(builtin.methods({ config: modules.config }));
-  modules.middleware.use(builtin.type());
+  modules.suitcase.put(stock.cors({ config: modules.config, lib: modules.lib }));
+  modules.suitcase.put(stock.methods({ config: modules.config }));
+  modules.suitcase.put(stock.type());
 
   return {
     start: engine.start,
     modules,
-    use: modules.middleware.use,
+    use: modules.suitcase.put,
     ...registrar,
   };
 }

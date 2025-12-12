@@ -2,7 +2,7 @@ import { Config } from '../config';
 import { Journey } from '../journey';
 import { TrafficOfficer } from '../traffic_officer';
 import { Renderer } from '../renderer';
-import { Middleware } from '../middleware';
+import { Suitcase } from '../suitcase';
 import { Logger } from '../logger';
 import { Inspector } from '../journey/inspector';
 import { Lib } from '../lib';
@@ -48,7 +48,7 @@ export function Modules(options: ServerOptions = {}): Modules {
     },
   });
 
-  modules.middleware = Middleware();
+  modules.suitcase = Suitcase();
 
   return modules;
 }

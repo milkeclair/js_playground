@@ -57,12 +57,12 @@ export function Resolver({ modules }: { modules: Partial<Modules> }) {
       modules.trafficOfficer = value;
     },
 
-    get middleware() {
-      return resolve(modules.middleware, 'middleware');
+    get suitcase() {
+      return resolve(modules.suitcase, 'suitcase');
     },
 
-    set middleware(value) {
-      modules.middleware = value;
+    set suitcase(value) {
+      modules.suitcase = value;
     },
 
     get lib() {

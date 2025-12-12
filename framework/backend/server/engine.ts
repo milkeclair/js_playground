@@ -15,7 +15,7 @@ export function Engine({
   modules: Modules;
   customRoutes: RouteDefinition[];
 }) {
-  const { start, executeMiddleware, handleRequest } = Lifecycle({ modules, customRoutes });
+  const { start, carrySuitcase, handleRequest } = Lifecycle({ modules, customRoutes });
 
   const loggingReceivedRequest = (req: IncomingMessage): void => {
     if (!modules.lib.url.hasExtension(req.url || '')) {
@@ -29,7 +29,7 @@ export function Engine({
         const req = Request({ req: _req });
         loggingReceivedRequest(req);
 
-        const overriddenRes = await executeMiddleware({ req, res });
+        const overriddenRes = await carrySuitcase({ req, res });
 
         await modules.journey.ensurePassable();
 
