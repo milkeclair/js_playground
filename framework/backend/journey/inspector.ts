@@ -1,7 +1,7 @@
 import type { IncomingMessage } from 'node:http';
 import { Journey } from '../journey';
 
-export function Sorter({ journey }: { journey: ReturnType<typeof Journey> }) {
+export function Inspector({ journey }: { journey: ReturnType<typeof Journey> }) {
   const isDirectoryTraversal = (req: IncomingMessage): boolean => {
     const hasParentRegexp = /(\.\.(\/|\\|$))/;
     return hasParentRegexp.test(req.url || '');

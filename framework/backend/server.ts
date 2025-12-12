@@ -9,7 +9,7 @@ import { TrafficOfficer } from './traffic_officer';
 import { Renderer } from './renderer';
 import { Middleware } from './middleware';
 import { Logger } from './logger';
-import { Sorter } from './journey/sorter';
+import { Inspector } from './journey/inspector';
 import { Lib } from './lib';
 
 export type ServerOptions = {
@@ -28,7 +28,7 @@ export type Modules = {
   config: ReturnType<typeof Config>;
   journey: ReturnType<typeof Journey>;
   logger: ReturnType<typeof Logger>;
-  sorter: ReturnType<typeof Sorter>;
+  inspector: ReturnType<typeof Inspector>;
   renderer: ReturnType<typeof Renderer>;
   trafficOfficer: ReturnType<typeof TrafficOfficer>;
   middleware: ReturnType<typeof Middleware>;

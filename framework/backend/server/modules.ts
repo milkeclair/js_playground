@@ -4,7 +4,7 @@ import { TrafficOfficer } from '../traffic_officer';
 import { Renderer } from '../renderer';
 import { Middleware } from '../middleware';
 import { Logger } from '../logger';
-import { Sorter } from '../journey/sorter';
+import { Inspector } from '../journey/inspector';
 import { Lib } from '../lib';
 import { Lazy } from './lazy';
 import { Resolver } from './modules/resolver';
@@ -17,7 +17,7 @@ export function Modules(options: ServerOptions = {}): Modules {
 
   modules.lib = Lib();
   modules.logger = Logger({ config: lazy.config, lib: modules.lib });
-  modules.sorter = Sorter({ journey: lazy.journey });
+  modules.inspector = Inspector({ journey: lazy.journey });
   modules.renderer = Renderer({
     server: lazy.server,
     journey: lazy.journey,
@@ -33,7 +33,7 @@ export function Modules(options: ServerOptions = {}): Modules {
   modules.journey = Journey({
     trafficOfficer: lazy.trafficOfficer,
     logger: lazy.logger,
-    sorter: lazy.sorter,
+    inspector: lazy.inspector,
     lib: modules.lib,
   });
 

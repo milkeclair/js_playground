@@ -33,12 +33,12 @@ export function Resolver({ modules }: { modules: Partial<Modules> }) {
       modules.logger = value;
     },
 
-    get sorter() {
-      return resolve(modules.sorter, 'sorter');
+    get inspector() {
+      return resolve(modules.inspector, 'inspector');
     },
 
-    set sorter(value) {
-      modules.sorter = value;
+    set inspector(value) {
+      modules.inspector = value;
     },
 
     get renderer() {

@@ -2,7 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { camelize } from '../../app/src/assets/script/camelize';
 import { TrafficOfficer } from './traffic_officer';
 import { Logger } from './logger';
-import { Sorter } from './journey/sorter';
+import { Inspector } from './journey/inspector';
 import { Lib } from './lib';
 import { RoadWorker } from './journey/road_worker';
 
@@ -21,12 +21,12 @@ const SAFE_ROADS = [
 export function Journey({
   trafficOfficer,
   logger,
-  sorter,
+  inspector,
   lib,
 }: {
   trafficOfficer: ReturnType<typeof TrafficOfficer>;
   logger: ReturnType<typeof Logger>;
-  sorter: ReturnType<typeof Sorter>;
+  inspector: ReturnType<typeof Inspector>;
   lib: ReturnType<typeof Lib>;
 }) {
   const extensionPaths: ExtensionPaths = {};
@@ -56,7 +56,7 @@ export function Journey({
     await roadWorker.pavement(Object.keys(extensionPaths));
 
     for (const { check, action } of SAFE_ROADS) {
-      if (sorter.lookup[check](req)) {
+      if (inspector.lookup[check](req)) {
         return trafficOfficer.action[action](req, res);
       }
     }

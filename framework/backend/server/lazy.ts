@@ -3,7 +3,7 @@ import { LazyServer } from './lazy/server';
 import { LazyConfig } from './lazy/config';
 import { LazyJourney } from './lazy/journey';
 import { LazyLogger } from './lazy/logger';
-import { LazySorter } from './lazy/sorter';
+import { LazyInspector } from './lazy/inspector';
 import { LazyRenderer } from './lazy/renderer';
 import { LazyTrafficOfficer } from './lazy/traffic_officer';
 import { LazyMiddleware } from './lazy/middleware';
@@ -26,8 +26,8 @@ export function Lazy(modules: Modules) {
       return LazyLogger(modules);
     },
 
-    get sorter() {
-      return LazySorter(modules);
+    get inspector() {
+      return LazyInspector(modules);
     },
 
     get renderer() {
