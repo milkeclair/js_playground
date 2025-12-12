@@ -5,7 +5,7 @@ import { LazyJourney } from './lazy/journey';
 import { LazyLogger } from './lazy/logger';
 import { LazySorter } from './lazy/sorter';
 import { LazyRenderer } from './lazy/renderer';
-import { LazyController } from './lazy/controller';
+import { LazyTrafficOfficer } from './lazy/traffic_officer';
 import { LazyMiddleware } from './lazy/middleware';
 
 export function Lazy(modules: Modules) {
@@ -34,8 +34,8 @@ export function Lazy(modules: Modules) {
       return LazyRenderer(modules);
     },
 
-    get controller() {
-      return LazyController(modules);
+    get trafficOfficer() {
+      return LazyTrafficOfficer(modules);
     },
 
     get middleware() {

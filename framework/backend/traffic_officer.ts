@@ -13,7 +13,7 @@ export const MIME_TYPES = {
   map: 'application/json',
 } as const;
 
-export function Controller({
+export function TrafficOfficer({
   renderer,
   logger,
 }: {

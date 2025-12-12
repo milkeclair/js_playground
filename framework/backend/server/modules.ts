@@ -1,6 +1,6 @@
 import { Config } from '../config';
 import { Journey } from '../journey';
-import { Controller } from '../controller';
+import { TrafficOfficer } from '../traffic_officer';
 import { Renderer } from '../renderer';
 import { Middleware } from '../middleware';
 import { Logger } from '../logger';
@@ -25,13 +25,13 @@ export function Modules(options: ServerOptions = {}): Modules {
     lib: modules.lib,
   });
 
-  modules.controller = Controller({
+  modules.trafficOfficer = TrafficOfficer({
     renderer: lazy.renderer,
     logger: lazy.logger,
   });
 
   modules.journey = Journey({
-    controller: lazy.controller,
+    trafficOfficer: lazy.trafficOfficer,
     logger: lazy.logger,
     sorter: lazy.sorter,
     lib: modules.lib,

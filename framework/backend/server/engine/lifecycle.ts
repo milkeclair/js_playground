@@ -69,7 +69,7 @@ export function Lifecycle({
     const handledCustom = await handleCustomRequest({ req, res });
 
     if (modules.config.routingType === 'definitive') {
-      if (!handledCustom) modules.controller.action.notFound(req, res);
+      if (!handledCustom) modules.trafficOfficer.action.notFound(req, res);
       return;
     }
 

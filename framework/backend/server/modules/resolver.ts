@@ -49,12 +49,12 @@ export function Resolver({ modules }: { modules: Partial<Modules> }) {
       modules.renderer = value;
     },
 
-    get controller() {
-      return resolve(modules.controller, 'controller');
+    get trafficOfficer() {
+      return resolve(modules.trafficOfficer, 'trafficOfficer');
     },
 
-    set controller(value) {
-      modules.controller = value;
+    set trafficOfficer(value) {
+      modules.trafficOfficer = value;
     },
 
     get middleware() {

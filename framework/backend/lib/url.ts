@@ -1,4 +1,4 @@
-import { MIME_TYPES } from '../controller';
+import { MIME_TYPES } from '../traffic_officer';
 
 export function Url() {
   return {

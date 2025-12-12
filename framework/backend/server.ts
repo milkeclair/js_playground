@@ -5,7 +5,7 @@ import { Registrar } from './server/registrar';
 import { Builtin } from './middleware/builtin';
 import { Config } from './config';
 import { Journey } from './journey';
-import { Controller } from './controller';
+import { TrafficOfficer } from './traffic_officer';
 import { Renderer } from './renderer';
 import { Middleware } from './middleware';
 import { Logger } from './logger';
@@ -30,7 +30,7 @@ export type Modules = {
   logger: ReturnType<typeof Logger>;
   sorter: ReturnType<typeof Sorter>;
   renderer: ReturnType<typeof Renderer>;
-  controller: ReturnType<typeof Controller>;
+  trafficOfficer: ReturnType<typeof TrafficOfficer>;
   middleware: ReturnType<typeof Middleware>;
   lib: ReturnType<typeof Lib>;
 };

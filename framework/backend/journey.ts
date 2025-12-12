@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { camelize } from '../../app/src/assets/script/camelize';
-import { Controller } from './controller';
+import { TrafficOfficer } from './traffic_officer';
 import { Logger } from './logger';
 import { Sorter } from './journey/sorter';
 import { Lib } from './lib';
@@ -10,21 +10,21 @@ export type Routes = Record<string, string>;
 type ExtensionPaths = Record<string, string[]>;
 
 const SAFE_ROADS = [
-  { check: 'illegal', shoesName: 'badRequest' },
-  { check: 'notFound', shoesName: 'notFound' },
-  { check: 'appIcon', shoesName: 'appIcon' },
-  { check: 'sourceMap', shoesName: 'sourceMap' },
-  { check: 'script', shoesName: 'script' },
-  { check: 'css', shoesName: 'css' },
+  { check: 'illegal', action: 'badRequest' },
+  { check: 'notFound', action: 'notFound' },
+  { check: 'appIcon', action: 'appIcon' },
+  { check: 'sourceMap', action: 'sourceMap' },
+  { check: 'script', action: 'script' },
+  { check: 'css', action: 'css' },
 ] as const;
 
 export function Journey({
-  controller,
+  trafficOfficer,
   logger,
   sorter,
   lib,
 }: {
-  controller: ReturnType<typeof Controller>;
+  trafficOfficer: ReturnType<typeof TrafficOfficer>;
   logger: ReturnType<typeof Logger>;
   sorter: ReturnType<typeof Sorter>;
   lib: ReturnType<typeof Lib>;
@@ -44,7 +44,7 @@ export function Journey({
     Object.assign(extensionPaths, extensions);
   };
 
-  const takeShoes = (req: IncomingMessage) => {
+  const lookupAction = (req: IncomingMessage) => {
     const fullPath = allowedRoutes[req.url ?? ''];
     const targetFilePath = lib.url.extractEnd(fullPath);
     const camelized = camelize(targetFilePath);
@@ -55,20 +55,20 @@ export function Journey({
   const walk = async ({ req, res }: { req: IncomingMessage; res: ServerResponse }) => {
     await roadWorker.pavement(Object.keys(extensionPaths));
 
-    for (const { check, shoesName } of SAFE_ROADS) {
+    for (const { check, action } of SAFE_ROADS) {
       if (sorter.lookup[check](req)) {
-        return controller.action[shoesName](req, res);
+        return trafficOfficer.action[action](req, res);
       }
     }
 
-    const shoesName = takeShoes(req) as keyof typeof controller.action;
-    if (shoesName === 'deliver') return;
+    const actionName = lookupAction(req) as keyof typeof trafficOfficer.action;
+    if (actionName === 'deliver') return;
 
-    const shoes = controller.action[shoesName];
-    if (shoes) {
-      shoes(req, res);
+    const action = trafficOfficer.action[actionName];
+    if (action) {
+      action(req, res);
     } else {
-      controller.action.deliver({ req, res, mimeType: 'html' });
+      trafficOfficer.action.deliver({ req, res, mimeType: 'html' });
     }
   };
 

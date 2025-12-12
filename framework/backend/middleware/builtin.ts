@@ -1,7 +1,7 @@
 import type { EnhancedRequest, EnhancedResponse } from '../type';
 import { Config } from '../config';
 import { Lib } from '../lib';
-import { MIME_TYPES } from '../controller';
+import { MIME_TYPES } from '../traffic_officer';
 
 export function Builtin() {
   return {
