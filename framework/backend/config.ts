@@ -1,11 +1,11 @@
-import { Router } from './router';
+import { Journey } from './journey';
 import type { ServerOptions } from './server';
 
 export function Config({
-  router,
+  journey,
   configs = {},
 }: {
-  router: ReturnType<typeof Router>;
+  journey: ReturnType<typeof Journey>;
   configs?: ServerOptions;
 }) {
   const host = configs.host || 'localhost';
@@ -18,7 +18,7 @@ export function Config({
   };
   const routingType = configs.routingType || 'hybrid';
 
-  router.draw({
+  journey.drawMap({
     routes: {
       '/favicon.ico': `${root}assets/favicon.ico`,
       '/404': `${root}view/404.ejs`,

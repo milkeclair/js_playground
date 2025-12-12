@@ -31,7 +31,7 @@ export function Engine({
 
         const overriddenRes = await executeMiddleware({ req, res });
 
-        await modules.router.ensurePassable();
+        await modules.journey.ensurePassable();
 
         await handleRequest({ req, res: overriddenRes });
       } catch (error) {

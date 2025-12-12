@@ -4,12 +4,12 @@ import { Engine } from './server/engine';
 import { Registrar } from './server/registrar';
 import { Builtin } from './middleware/builtin';
 import { Config } from './config';
-import { Router } from './router';
+import { Journey } from './journey';
 import { Controller } from './controller';
 import { Renderer } from './renderer';
 import { Middleware } from './middleware';
 import { Logger } from './logger';
-import { Sorter } from './router/sorter';
+import { Sorter } from './journey/sorter';
 import { Lib } from './lib';
 
 export type ServerOptions = {
@@ -26,7 +26,7 @@ export type ServerOptions = {
 
 export type Modules = {
   config: ReturnType<typeof Config>;
-  router: ReturnType<typeof Router>;
+  journey: ReturnType<typeof Journey>;
   logger: ReturnType<typeof Logger>;
   sorter: ReturnType<typeof Sorter>;
   renderer: ReturnType<typeof Renderer>;

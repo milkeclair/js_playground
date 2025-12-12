@@ -1,7 +1,7 @@
 import type { IncomingMessage } from 'node:http';
-import { Router } from '../router';
+import { Journey } from '../journey';
 
-export function Sorter({ router }: { router: ReturnType<typeof Router> }) {
+export function Sorter({ journey }: { journey: ReturnType<typeof Journey> }) {
   const isDirectoryTraversal = (req: IncomingMessage): boolean => {
     const hasParentRegexp = /(\.\.(\/|\\|$))/;
     return hasParentRegexp.test(req.url || '');
@@ -13,7 +13,7 @@ export function Sorter({ router }: { router: ReturnType<typeof Router> }) {
     },
 
     notFound: (req: IncomingMessage): boolean => {
-      return !router.allowedRoutes[req.url || ''] || req.url === '/404';
+      return !journey.allowedRoutes[req.url || ''] || req.url === '/404';
     },
 
     appIcon: (req: IncomingMessage): boolean => {

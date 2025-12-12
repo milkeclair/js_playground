@@ -62,7 +62,7 @@ export function Lifecycle({
     res: ServerResponse;
   }): Promise<void> => {
     if (modules.config.routingType === 'filebase') {
-      await modules.router.handle({ req, res });
+      await modules.journey.walk({ req, res });
       return;
     }
 
@@ -73,7 +73,7 @@ export function Lifecycle({
       return;
     }
 
-    if (!handledCustom) await modules.router.handle({ req, res });
+    if (!handledCustom) await modules.journey.walk({ req, res });
   };
 
   const listenExit = () => {

@@ -1,16 +1,16 @@
 import ejs from 'ejs';
-import { Router } from './router';
+import { Journey } from './journey';
 import { Logger } from './logger';
 import { Lib } from './lib';
 
 export function Renderer({
   server,
-  router,
+  journey,
   logger,
   lib,
 }: {
   server: { config: { root: string } };
-  router: ReturnType<typeof Router>;
+  journey: ReturnType<typeof Journey>;
   logger: ReturnType<typeof Logger>;
   lib: ReturnType<typeof Lib>;
 }) {
@@ -40,8 +40,8 @@ export function Renderer({
     } catch {
       if (loggable) logger.error.cannotRender(url);
 
-      const content = lib.file.read(router.allowedRoutes['/404']);
-      return ejs.render(content, { ...viewData, filename: router.allowedRoutes['/404'] });
+      const content = lib.file.read(journey.allowedRoutes['/404']);
+      return ejs.render(content, { ...viewData, filename: journey.allowedRoutes['/404'] });
     }
   };
 
@@ -54,7 +54,7 @@ export function Renderer({
     data?: Record<string, unknown>;
     loggable?: boolean;
   }): string => {
-    const path = router.allowedRoutes[url];
+    const path = journey.allowedRoutes[url];
     const content = renderView({ url, path, data, loggable });
     if (loggable) logger.info.rendered(url);
 

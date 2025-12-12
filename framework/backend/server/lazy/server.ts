@@ -1,5 +1,5 @@
 import { Modules } from '../../server';
-import { Router } from '../../router';
+import { Journey } from '../../journey';
 
 export function LazyServer(modules: Modules) {
   return {
@@ -9,7 +9,7 @@ export function LazyServer(modules: Modules) {
       },
     },
 
-    handle: (...args: Parameters<ReturnType<typeof Router>['handle']>) =>
-      modules.router?.handle(...args),
+    walk: (...args: Parameters<ReturnType<typeof Journey>['walk']>) =>
+      modules.journey?.walk(...args),
   };
 }

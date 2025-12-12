@@ -1,10 +1,10 @@
 import { Config } from '../config';
-import { Router } from '../router';
+import { Journey } from '../journey';
 import { Controller } from '../controller';
 import { Renderer } from '../renderer';
 import { Middleware } from '../middleware';
 import { Logger } from '../logger';
-import { Sorter } from '../router/sorter';
+import { Sorter } from '../journey/sorter';
 import { Lib } from '../lib';
 import { Lazy } from './lazy';
 import { Resolver } from './modules/resolver';
@@ -17,11 +17,10 @@ export function Modules(options: ServerOptions = {}): Modules {
 
   modules.lib = Lib();
   modules.logger = Logger({ config: lazy.config, lib: modules.lib });
-  modules.sorter = Sorter({ router: lazy.router });
-
+  modules.sorter = Sorter({ journey: lazy.journey });
   modules.renderer = Renderer({
     server: lazy.server,
-    router: lazy.router,
+    journey: lazy.journey,
     logger: lazy.logger,
     lib: modules.lib,
   });
@@ -31,7 +30,7 @@ export function Modules(options: ServerOptions = {}): Modules {
     logger: lazy.logger,
   });
 
-  modules.router = Router({
+  modules.journey = Journey({
     controller: lazy.controller,
     logger: lazy.logger,
     sorter: lazy.sorter,
@@ -39,7 +38,7 @@ export function Modules(options: ServerOptions = {}): Modules {
   });
 
   modules.config = Config({
-    router: lazy.router,
+    journey: lazy.journey,
     configs: {
       host: options.host,
       port: options.port,

@@ -62,7 +62,7 @@ export function Response({
       const { template, params = {} } = options;
       const templatePath = resolveTemplatePath(template);
 
-      if (!modules.router.allowedRoutes[templatePath]) {
+      if (!modules.journey.allowedRoutes[templatePath]) {
         handleNotFound({ template: templatePath });
         return;
       }

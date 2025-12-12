@@ -17,12 +17,12 @@ export function Resolver({ modules }: { modules: Partial<Modules> }) {
       modules.config = value;
     },
 
-    get router() {
-      return resolve(modules.router, 'router');
+    get journey() {
+      return resolve(modules.journey, 'journey');
     },
 
-    set router(value) {
-      modules.router = value;
+    set journey(value) {
+      modules.journey = value;
     },
 
     get logger() {

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { Logger } from '../logger';
 import { Lib } from '../lib';
-import type { Routes } from '../router';
+import type { Routes } from '../journey';
 import { Throttle } from './road_worker/throttle';
 
 export function RoadWorker({

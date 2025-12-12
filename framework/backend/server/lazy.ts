@@ -1,7 +1,7 @@
 import { Modules } from '../server';
 import { LazyServer } from './lazy/server';
 import { LazyConfig } from './lazy/config';
-import { LazyRouter } from './lazy/router';
+import { LazyJourney } from './lazy/journey';
 import { LazyLogger } from './lazy/logger';
 import { LazySorter } from './lazy/sorter';
 import { LazyRenderer } from './lazy/renderer';
@@ -18,8 +18,8 @@ export function Lazy(modules: Modules) {
       return LazyConfig(modules);
     },
 
-    get router() {
-      return LazyRouter(modules);
+    get journey() {
+      return LazyJourney(modules);
     },
 
     get logger() {
