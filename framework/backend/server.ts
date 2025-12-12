@@ -6,7 +6,7 @@ import { Stock } from './suitcase/stock';
 import { Config } from './config';
 import { Journey } from './journey';
 import { TrafficOfficer } from './traffic_officer';
-import { Renderer } from './renderer';
+import { Sightsee } from './sightsee';
 import { Suitcase } from './suitcase';
 import { Logger } from './logger';
 import { Inspector } from './journey/inspector';
@@ -29,7 +29,7 @@ export type Modules = {
   journey: ReturnType<typeof Journey>;
   logger: ReturnType<typeof Logger>;
   inspector: ReturnType<typeof Inspector>;
-  renderer: ReturnType<typeof Renderer>;
+  sightsee: ReturnType<typeof Sightsee>;
   trafficOfficer: ReturnType<typeof TrafficOfficer>;
   suitcase: ReturnType<typeof Suitcase>;
   lib: ReturnType<typeof Lib>;

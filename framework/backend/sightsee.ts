@@ -3,7 +3,7 @@ import { Journey } from './journey';
 import { Logger } from './logger';
 import { Lib } from './lib';
 
-export function Renderer({
+export function Sightsee({
   server,
   journey,
   logger,
@@ -14,7 +14,7 @@ export function Renderer({
   logger: ReturnType<typeof Logger>;
   lib: ReturnType<typeof Lib>;
 }) {
-  const renderView = ({
+  const photo = ({
     url,
     path,
     data,
@@ -45,7 +45,7 @@ export function Renderer({
     }
   };
 
-  const render = ({
+  const takePhoto = ({
     url,
     data = {},
     loggable = false,
@@ -55,15 +55,15 @@ export function Renderer({
     loggable?: boolean;
   }): string => {
     const path = journey.allowedRoutes[url];
-    const content = renderView({ url, path, data, loggable });
+    const content = photo({ url, path, data, loggable });
     if (loggable) logger.info.rendered(url);
 
     return content;
   };
 
-  const isNotFoundView = (view: string): boolean => {
-    return view.includes('<title>404</title>');
+  const isNotFoundPhoto = (photo: string): boolean => {
+    return photo.includes('<title>404</title>');
   };
 
-  return { render, isNotFoundView };
+  return { takePhoto, isNotFoundPhoto };
 }

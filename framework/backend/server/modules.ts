@@ -1,7 +1,7 @@
 import { Config } from '../config';
 import { Journey } from '../journey';
 import { TrafficOfficer } from '../traffic_officer';
-import { Renderer } from '../renderer';
+import { Sightsee } from '../sightsee';
 import { Suitcase } from '../suitcase';
 import { Logger } from '../logger';
 import { Inspector } from '../journey/inspector';
@@ -18,7 +18,7 @@ export function Modules(options: ServerOptions = {}): Modules {
   modules.lib = Lib();
   modules.logger = Logger({ config: lazy.config, lib: modules.lib });
   modules.inspector = Inspector({ journey: lazy.journey });
-  modules.renderer = Renderer({
+  modules.sightsee = Sightsee({
     server: lazy.server,
     journey: lazy.journey,
     logger: lazy.logger,
@@ -26,7 +26,7 @@ export function Modules(options: ServerOptions = {}): Modules {
   });
 
   modules.trafficOfficer = TrafficOfficer({
-    renderer: lazy.renderer,
+    sightsee: lazy.sightsee,
     logger: lazy.logger,
   });
 

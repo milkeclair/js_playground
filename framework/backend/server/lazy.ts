@@ -4,7 +4,7 @@ import { LazyConfig } from './lazy/config';
 import { LazyJourney } from './lazy/journey';
 import { LazyLogger } from './lazy/logger';
 import { LazyInspector } from './lazy/inspector';
-import { LazyRenderer } from './lazy/renderer';
+import { LazySightsee } from './lazy/sightsee';
 import { LazyTrafficOfficer } from './lazy/traffic_officer';
 import { LazySuitcase } from './lazy/suitcase';
 
@@ -30,8 +30,8 @@ export function Lazy(modules: Modules) {
       return LazyInspector(modules);
     },
 
-    get renderer() {
-      return LazyRenderer(modules);
+    get sightsee() {
+      return LazySightsee(modules);
     },
 
     get trafficOfficer() {

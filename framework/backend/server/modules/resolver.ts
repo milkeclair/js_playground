@@ -41,12 +41,12 @@ export function Resolver({ modules }: { modules: Partial<Modules> }) {
       modules.inspector = value;
     },
 
-    get renderer() {
-      return resolve(modules.renderer, 'renderer');
+    get sightsee() {
+      return resolve(modules.sightsee, 'sightsee');
     },
 
-    set renderer(value) {
-      modules.renderer = value;
+    set sightsee(value) {
+      modules.sightsee = value;
     },
 
     get trafficOfficer() {

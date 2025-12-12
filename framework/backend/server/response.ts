@@ -25,7 +25,7 @@ export function Response({
   const handleNotFound = ({ template }: { template: string }) => {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'text/html');
-    const notFoundContent = modules.renderer.render({
+    const notFoundContent = modules.sightsee.takePhoto({
       url: '/404',
       data: { message: `View not found: ${template}` },
       loggable: true,
@@ -67,7 +67,11 @@ export function Response({
         return;
       }
 
-      const content = modules.renderer.render({ url: templatePath, data: params, loggable: true });
+      const content = modules.sightsee.takePhoto({
+        url: templatePath,
+        data: params,
+        loggable: true,
+      });
       res.statusCode = statusCode;
       res.setHeader('Content-Type', 'text/html');
       res.end(content);
