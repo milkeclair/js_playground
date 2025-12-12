@@ -1,10 +1,10 @@
-import { type Server as NodeServer, type ServerResponse } from 'node:http';
+import type { Server, ServerResponse } from 'node:http';
 import { type Modules } from '../../server';
 import { Request } from '../request';
 import { Response } from '../response';
 import { RouteDefinition } from '../../type';
 
-export function Lifecycle({
+export function Guide({
   modules,
   customRoutes,
 }: {
@@ -30,7 +30,7 @@ export function Lifecycle({
     return res;
   };
 
-  const handleCustomRequest = async ({
+  const navigatePlannedRoute = async ({
     req,
     res,
   }: {
@@ -54,7 +54,7 @@ export function Lifecycle({
     }
   };
 
-  const handleRequest = async ({
+  const navigate = async ({
     req,
     res,
   }: {
@@ -66,24 +66,17 @@ export function Lifecycle({
       return;
     }
 
-    const handledCustom = await handleCustomRequest({ req, res });
+    const navigated = await navigatePlannedRoute({ req, res });
 
     if (modules.config.routingType === 'definitive') {
-      if (!handledCustom) modules.trafficOfficer.action.notFound(req, res);
+      if (!navigated) modules.trafficOfficer.action.notFound(req, res);
       return;
     }
 
-    if (!handledCustom) await modules.journey.walk({ req, res });
+    if (!navigated) await modules.journey.walk({ req, res });
   };
 
-  const listenExit = () => {
-    process.on('SIGINT', () => {
-      modules.logger.info.exited();
-      process.exit();
-    });
-  };
-
-  const start = ({ createServer }: { createServer: () => NodeServer }) => {
+  const depart = (createServer: () => Server) => {
     const httpServer = createServer();
 
     httpServer.listen(modules.config.port, modules.config.host, () => {
@@ -91,8 +84,11 @@ export function Lifecycle({
       modules.logger.info.howToStop();
     });
 
-    listenExit();
+    process.on('SIGINT', () => {
+      modules.logger.info.exited();
+      process.exit();
+    });
   };
 
-  return { start, carrySuitcase, handleRequest };
+  return { depart, carrySuitcase, navigate };
 }

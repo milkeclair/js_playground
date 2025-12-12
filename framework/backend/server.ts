@@ -1,6 +1,6 @@
 import type { RouteDefinition } from './type';
 import { Modules } from './server/modules';
-import { Engine } from './server/engine';
+import { Plane } from './server/plane';
 import { Registrar } from './server/registrar';
 import { Stock } from './suitcase/stock';
 import { Config } from './config';
@@ -39,7 +39,7 @@ export function Server(options: ServerOptions = {}) {
   const customRoutes: RouteDefinition[] = [];
 
   const modules = Modules(options);
-  const engine = Engine({ modules, customRoutes });
+  const plane = Plane({ modules, customRoutes });
   const registrar = Registrar({ customRoutes });
   const stock = Stock();
 
@@ -48,7 +48,7 @@ export function Server(options: ServerOptions = {}) {
   modules.suitcase.put(stock.type());
 
   return {
-    start: engine.start,
+    start: plane.takeOff,
     modules,
     use: modules.suitcase.put,
     ...registrar,

@@ -1,21 +1,17 @@
-import {
-  createServer as createNodeServer,
-  type Server as NodeServer,
-  type IncomingMessage,
-} from 'node:http';
+import { createServer, type Server, type IncomingMessage } from 'node:http';
 import { Request } from './request';
-import { Lifecycle } from './engine/lifecycle';
+import { Guide } from './plane/guide';
 import type { RouteDefinition } from '../type';
 import type { Modules } from '../server';
 
-export function Engine({
+export function Plane({
   modules,
   customRoutes,
 }: {
   modules: Modules;
   customRoutes: RouteDefinition[];
 }) {
-  const { start, carrySuitcase, handleRequest } = Lifecycle({ modules, customRoutes });
+  const { depart, carrySuitcase, navigate } = Guide({ modules, customRoutes });
 
   const loggingReceivedRequest = (req: IncomingMessage): void => {
     if (!modules.lib.url.hasExtension(req.url || '')) {
@@ -23,8 +19,8 @@ export function Engine({
     }
   };
 
-  const createServer = (): NodeServer => {
-    return createNodeServer(async (_req, res) => {
+  const itinerary = (): Server => {
+    return createServer(async (_req, res) => {
       try {
         const req = Request({ req: _req });
         loggingReceivedRequest(req);
@@ -33,7 +29,7 @@ export function Engine({
 
         await modules.journey.ensurePassable();
 
-        await handleRequest({ req, res: overriddenRes });
+        await navigate({ req, res: overriddenRes });
       } catch (error) {
         modules.logger.error.custom(error instanceof Error ? error.message : String(error));
         if (!res.headersSent) {
@@ -44,5 +40,5 @@ export function Engine({
     });
   };
 
-  return { start: () => start({ createServer }) };
+  return { takeOff: () => depart(itinerary) };
 }
