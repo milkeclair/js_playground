@@ -5,7 +5,7 @@ function App() {
     root: new URL('./src/', import.meta.url).pathname,
     allowed: { origins: ['http://example.com'] },
     port: 4000,
-    routingType: 'hybrid',
+    routingMode: 'hybrid',
   });
 
   let timer: ReturnType<typeof setTimeout>;

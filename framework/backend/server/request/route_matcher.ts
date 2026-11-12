@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'node:http';
 import type { RouteDefinition, RequestHandler } from '../../type';
 
-export function Custom({ req, protocol }: { req: IncomingMessage; protocol: string }) {
+export function RouteMatcher({ req, protocol }: { req: IncomingMessage; protocol: string }) {
   const segments = ({
     targetRoute,
     uriPath,

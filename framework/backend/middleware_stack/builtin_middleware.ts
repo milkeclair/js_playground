@@ -1,9 +1,9 @@
 import type { EnhancedRequest, EnhancedResponse } from '../type';
 import { Config } from '../config';
 import { Lib } from '../lib';
-import { MIME_TYPES } from '../traffic_officer';
+import { MIME_TYPES } from '../file_response_handler';
 
-export function Stock() {
+export function BuiltinMiddleware() {
   return {
     cors: ({ config, lib }: { config: ReturnType<typeof Config>; lib: ReturnType<typeof Lib> }) => {
       return ({ req, res }: { req: EnhancedRequest; res: EnhancedResponse }): void => {

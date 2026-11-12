@@ -1,15 +1,15 @@
 import type { ServerResponse } from 'http';
 import type { EnhancedResponse } from '../type';
-import type { Modules } from '../server';
+import type { ServerDependencies } from '../server';
 
 export function Response({
   res,
   requestPath,
-  modules,
+  dependencies,
 }: {
   res: ServerResponse;
   requestPath: string;
-  modules: Modules;
+  dependencies: ServerDependencies;
 }): EnhancedResponse {
   let statusCode = 200;
 
@@ -25,7 +25,7 @@ export function Response({
   const handleNotFound = ({ template }: { template: string }) => {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'text/html');
-    const notFoundContent = modules.sightsee.takePhoto({
+    const notFoundContent = dependencies.contentRenderer.render({
       url: '/404',
       data: { message: `View not found: ${template}` },
       loggable: true,
@@ -62,12 +62,12 @@ export function Response({
       const { template, params = {} } = options;
       const templatePath = resolveTemplatePath(template);
 
-      if (!modules.journey.allowedRoutes[templatePath]) {
+      if (!dependencies.fileRouter.fileRoutes[templatePath]) {
         handleNotFound({ template: templatePath });
         return;
       }
 
-      const content = modules.sightsee.takePhoto({
+      const content = dependencies.contentRenderer.render({
         url: templatePath,
         data: params,
         loggable: true,

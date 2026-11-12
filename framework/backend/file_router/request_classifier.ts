@@ -1,7 +1,7 @@
 import type { IncomingMessage } from 'node:http';
-import { Journey } from '../journey';
+import { FileRouter } from '../file_router';
 
-export function Inspector({ journey }: { journey: ReturnType<typeof Journey> }) {
+export function RequestClassifier({ fileRouter }: { fileRouter: ReturnType<typeof FileRouter> }) {
   const isDirectoryTraversal = (req: IncomingMessage): boolean => {
     const hasParentRegexp = /(\.\.(\/|\\|$))/;
     return hasParentRegexp.test(req.url || '');
@@ -13,7 +13,7 @@ export function Inspector({ journey }: { journey: ReturnType<typeof Journey> }) 
     },
 
     notFound: (req: IncomingMessage): boolean => {
-      return !journey.allowedRoutes[req.url || ''] || req.url === '/404';
+      return !fileRouter.fileRoutes[req.url || ''] || req.url === '/404';
     },
 
     appIcon: (req: IncomingMessage): boolean => {

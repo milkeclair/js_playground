@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { Sightsee } from './sightsee';
+import { ContentRenderer } from './content_renderer';
 import { Logger } from './logger';
 
 export const MIME_TYPES = {
@@ -13,15 +13,15 @@ export const MIME_TYPES = {
   map: 'application/json',
 } as const;
 
-export function TrafficOfficer({
-  sightsee,
+export function FileResponseHandler({
+  contentRenderer,
   logger,
 }: {
-  sightsee: ReturnType<typeof Sightsee>;
+  contentRenderer: ReturnType<typeof ContentRenderer>;
   logger: ReturnType<typeof Logger>;
 }) {
   const setStatusCode = (req: IncomingMessage, res: ServerResponse, view: string) => {
-    res.statusCode = sightsee.isNotFoundPhoto(view) ? 404 : 200;
+    res.statusCode = contentRenderer.isNotFoundContent(view) ? 404 : 200;
     if (res.statusCode === 404) {
       logger.warn.notFound(req);
     }
@@ -38,11 +38,11 @@ export function TrafficOfficer({
 
     notFound: (req: IncomingMessage, res: ServerResponse) => {
       const data = { message: `${req.url} not found` };
-      const photo = sightsee.takePhoto({ url: '/404', data });
+      const content = contentRenderer.render({ url: '/404', data });
 
-      setStatusCode(req, res, photo);
+      setStatusCode(req, res, content);
       res.setHeader('Content-Type', MIME_TYPES.html);
-      res.end(photo);
+      res.end(content);
     },
 
     appIcon: (req: IncomingMessage, res: ServerResponse) => {
@@ -74,7 +74,7 @@ export function TrafficOfficer({
       data?: Record<string, unknown>;
       loggable?: boolean;
     }) => {
-      const content = sightsee.takePhoto({ url: req.url || '', data, loggable });
+      const content = contentRenderer.render({ url: req.url || '', data, loggable });
 
       setStatusCode(req, res, content);
       res.setHeader('Content-Type', MIME_TYPES[mimeType]);

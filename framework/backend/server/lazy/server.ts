@@ -1,15 +1,15 @@
-import { Modules } from '../../server';
-import { Journey } from '../../journey';
+import { ServerDependencies } from '../../server';
+import { FileRouter } from '../../file_router';
 
-export function LazyServer(modules: Modules) {
+export function LazyServer(dependencies: ServerDependencies) {
   return {
     config: {
       get root() {
-        return modules.config?.root;
+        return dependencies.config?.root;
       },
     },
 
-    walk: (...args: Parameters<ReturnType<typeof Journey>['walk']>) =>
-      modules.journey?.walk(...args),
+    handle: (...args: Parameters<ReturnType<typeof FileRouter>['handle']>) =>
+      dependencies.fileRouter?.handle(...args),
   };
 }

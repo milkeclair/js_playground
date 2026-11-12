@@ -1,4 +1,4 @@
-import { MIME_TYPES } from '../traffic_officer';
+import { MIME_TYPES } from '../file_response_handler';
 
 export function Url() {
   return {

@@ -1,17 +1,17 @@
-import { Modules } from '../../server';
+import { ServerDependencies } from '../../server';
 
-export function LazyLogger(modules: Modules) {
+export function LazyLogger(dependencies: ServerDependencies) {
   return {
     get info() {
-      return modules.logger?.info;
+      return dependencies.logger?.info;
     },
 
     get warn() {
-      return modules.logger?.warn;
+      return dependencies.logger?.warn;
     },
 
     get error() {
-      return modules.logger?.error;
+      return dependencies.logger?.error;
     },
   };
 }

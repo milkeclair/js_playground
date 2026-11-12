@@ -1,17 +1,17 @@
 import type { Server, ServerResponse } from 'node:http';
-import { type Modules } from '../../server';
+import { type ServerDependencies } from '../../server';
 import { Request } from '../request';
 import { Response } from '../response';
 import { RouteDefinition } from '../../type';
 
-export function Guide({
-  modules,
+export function RequestDispatcher({
+  dependencies,
   customRoutes,
 }: {
-  modules: Modules;
+  dependencies: ServerDependencies;
   customRoutes: RouteDefinition[];
 }) {
-  const carrySuitcase = async ({
+  const runMiddleware = async ({
     req,
     res,
   }: {
@@ -20,9 +20,9 @@ export function Guide({
   }): Promise<ServerResponse> => {
     const parsedReq = await req.parse(req);
     const urlPath = req.uri.pathname;
-    const enhancedRes = Response({ res, requestPath: urlPath, modules });
+    const enhancedRes = Response({ res, requestPath: urlPath, dependencies });
 
-    await modules.suitcase.zip({
+    await dependencies.middlewareStack.run({
       req: parsedReq,
       res: enhancedRes,
     });
@@ -30,14 +30,14 @@ export function Guide({
     return res;
   };
 
-  const navigatePlannedRoute = async ({
+  const dispatchExplicitRoute = async ({
     req,
     res,
   }: {
     req: ReturnType<typeof Request>;
     res: ServerResponse;
   }): Promise<boolean> => {
-    const customReq = req.custom.find({
+    const customReq = req.routeMatcher.find({
       routes: customRoutes,
       method: req.method,
       url: req.url,
@@ -45,7 +45,7 @@ export function Guide({
 
     if (customReq) {
       const enhancedReq = await req.enhance(req, customReq.pathParams);
-      const enhancedRes = Response({ res, requestPath: req.uri.pathname, modules });
+      const enhancedRes = Response({ res, requestPath: req.uri.pathname, dependencies });
       await customReq.handler({ req: enhancedReq, res: enhancedRes });
 
       return true;
@@ -54,41 +54,41 @@ export function Guide({
     }
   };
 
-  const navigate = async ({
+  const dispatch = async ({
     req,
     res,
   }: {
     req: ReturnType<typeof Request>;
     res: ServerResponse;
   }): Promise<void> => {
-    if (modules.config.routingType === 'filebase') {
-      await modules.journey.walk({ req, res });
+    if (dependencies.config.routingMode === 'file') {
+      await dependencies.fileRouter.handle({ req, res });
       return;
     }
 
-    const navigated = await navigatePlannedRoute({ req, res });
+    const matched = await dispatchExplicitRoute({ req, res });
 
-    if (modules.config.routingType === 'definitive') {
-      if (!navigated) modules.trafficOfficer.action.notFound(req, res);
+    if (dependencies.config.routingMode === 'explicit') {
+      if (!matched) dependencies.fileResponseHandler.action.notFound(req, res);
       return;
     }
 
-    if (!navigated) await modules.journey.walk({ req, res });
+    if (!matched) await dependencies.fileRouter.handle({ req, res });
   };
 
-  const depart = (createServer: () => Server) => {
+  const listen = (createServer: () => Server) => {
     const httpServer = createServer();
 
-    httpServer.listen(modules.config.port, modules.config.host, () => {
-      modules.logger.info.serverStarted();
-      modules.logger.info.howToStop();
+    httpServer.listen(dependencies.config.port, dependencies.config.host, () => {
+      dependencies.logger.info.serverStarted();
+      dependencies.logger.info.howToStop();
     });
 
     process.on('SIGINT', () => {
-      modules.logger.info.exited();
+      dependencies.logger.info.exited();
       process.exit();
     });
   };
 
-  return { depart, carrySuitcase, navigate };
+  return { listen, runMiddleware, dispatch };
 }

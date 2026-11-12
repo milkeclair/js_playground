@@ -1,21 +1,21 @@
 import path from 'node:path';
 import { Logger } from '../logger';
 import { Lib } from '../lib';
-import type { Routes } from '../journey';
-import { RoadClosure } from './road_closure';
+import type { Routes } from '../file_router';
+import { RefreshThrottle } from './refresh_throttle';
 
-export function RoadWorker({
+export function FileRouteScanner({
   logger,
   lib,
-  allowedRoutes,
+  fileRoutes,
   extensionPaths,
 }: {
   logger: ReturnType<typeof Logger>;
   lib: ReturnType<typeof Lib>;
-  allowedRoutes: Routes;
+  fileRoutes: Routes;
   extensionPaths: Record<string, string[]>;
 }) {
-  const roadClosure = RoadClosure();
+  const refreshThrottle = RefreshThrottle();
 
   const formatRoute = (filePath: string, extension: string) => {
     if (extension === '.html' || extension === '.ejs') {
@@ -46,7 +46,7 @@ export function RoadWorker({
     }
   };
 
-  const updateAllowedRoutes = async (basePath: string, extension: string) => {
+  const updateFileRoutes = async (basePath: string, extension: string) => {
     const files = await extractTargetFiles(basePath, extension);
 
     return files.reduce((routes: Routes, file: string) => {
@@ -54,30 +54,30 @@ export function RoadWorker({
       routes[route] = path.resolve(basePath, file);
 
       return routes;
-    }, allowedRoutes);
+    }, fileRoutes);
   };
 
-  const pavement = async (extensions: string[]) => {
-    if (!roadClosure.isOpen()) return;
+  const refreshIfNeeded = async (extensions: string[]) => {
+    if (!refreshThrottle.shouldRefresh()) return;
 
-    roadClosure.close();
-    logger.info.updatingAllowedRoutes();
+    refreshThrottle.markRefreshed();
+    logger.info.updatingFileRoutes();
 
     for (const extension of extensions) {
       for (const basePath of extensionPaths[extension]) {
-        allowedRoutes = await updateAllowedRoutes(basePath, extension);
+        fileRoutes = await updateFileRoutes(basePath, extension);
       }
     }
 
-    logger.info.allowedRoutesUpdated();
+    logger.info.fileRoutesUpdated();
   };
 
-  const ensurePassable = async () => {
-    await pavement(Object.keys(extensionPaths));
+  const refreshRoutesIfNeeded = async () => {
+    await refreshIfNeeded(Object.keys(extensionPaths));
   };
 
   return {
-    pavement,
-    ensurePassable,
+    refreshIfNeeded,
+    refreshRoutesIfNeeded,
   };
 }

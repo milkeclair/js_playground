@@ -1,10 +1,10 @@
 const ONE_MINUTE = 60000;
 
-export function RoadClosure() {
+export function RefreshThrottle() {
   let lastTime: number | null = null;
 
   return {
-    isOpen: () => {
+    shouldRefresh: () => {
       if (!lastTime) {
         lastTime = Date.now();
         return true;
@@ -13,7 +13,7 @@ export function RoadClosure() {
       }
     },
 
-    close: () => {
+    markRefreshed: () => {
       lastTime = Date.now();
     },
   };
