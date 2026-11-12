@@ -18,8 +18,8 @@ export function LazyConfig(dependencies: ServerDependencies) {
       return dependencies.config?.allowed;
     },
 
-    get routingType() {
-      return dependencies.config?.routingType;
+    get routingMode() {
+      return dependencies.config?.routingMode;
     },
   };
 }

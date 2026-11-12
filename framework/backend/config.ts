@@ -16,7 +16,7 @@ export function Config({
     ips: configs.allowed?.ips || ['::1', '127.0.0.1'],
     methods: configs.allowed?.methods || ['GET', 'POST', 'PUT', 'DELETE'],
   };
-  const routingType = configs.routingType || 'hybrid';
+  const routingMode = configs.routingMode || 'hybrid';
 
   fileRouter.configure({
     routes: {
@@ -37,7 +37,7 @@ export function Config({
     host,
     port,
     root,
-    routingType,
+    routingMode,
     allowed,
   };
 }

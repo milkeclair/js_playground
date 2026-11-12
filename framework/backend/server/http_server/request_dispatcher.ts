@@ -61,14 +61,14 @@ export function RequestDispatcher({
     req: ReturnType<typeof Request>;
     res: ServerResponse;
   }): Promise<void> => {
-    if (dependencies.config.routingType === 'filebase') {
+    if (dependencies.config.routingMode === 'file') {
       await dependencies.fileRouter.handle({ req, res });
       return;
     }
 
     const matched = await dispatchExplicitRoute({ req, res });
 
-    if (dependencies.config.routingType === 'definitive') {
+    if (dependencies.config.routingMode === 'explicit') {
       if (!matched) dependencies.fileResponseHandler.action.notFound(req, res);
       return;
     }
