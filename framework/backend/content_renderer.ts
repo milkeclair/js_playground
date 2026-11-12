@@ -1,20 +1,20 @@
 import ejs from 'ejs';
-import { Journey } from './journey';
+import { FileRouter } from './file_router';
 import { Logger } from './logger';
 import { Lib } from './lib';
 
-export function Sightsee({
+export function ContentRenderer({
   server,
-  journey,
+  fileRouter,
   logger,
   lib,
 }: {
   server: { config: { root: string } };
-  journey: ReturnType<typeof Journey>;
+  fileRouter: ReturnType<typeof FileRouter>;
   logger: ReturnType<typeof Logger>;
   lib: ReturnType<typeof Lib>;
 }) {
-  const photo = ({
+  const renderFile = ({
     url,
     path,
     data,
@@ -40,12 +40,12 @@ export function Sightsee({
     } catch {
       if (loggable) logger.error.cannotRender(url);
 
-      const content = lib.file.read(journey.allowedRoutes['/404']);
-      return ejs.render(content, { ...viewData, filename: journey.allowedRoutes['/404'] });
+      const content = lib.file.read(fileRouter.fileRoutes['/404']);
+      return ejs.render(content, { ...viewData, filename: fileRouter.fileRoutes['/404'] });
     }
   };
 
-  const takePhoto = ({
+  const render = ({
     url,
     data = {},
     loggable = false,
@@ -54,16 +54,16 @@ export function Sightsee({
     data?: Record<string, unknown>;
     loggable?: boolean;
   }): string => {
-    const path = journey.allowedRoutes[url];
-    const content = photo({ url, path, data, loggable });
+    const path = fileRouter.fileRoutes[url];
+    const content = renderFile({ url, path, data, loggable });
     if (loggable) logger.info.rendered(url);
 
     return content;
   };
 
-  const isNotFoundPhoto = (photo: string): boolean => {
-    return photo.includes('<title>404</title>');
+  const isNotFoundContent = (content: string): boolean => {
+    return content.includes('<title>404</title>');
   };
 
-  return { takePhoto, isNotFoundPhoto };
+  return { render, isNotFoundContent };
 }

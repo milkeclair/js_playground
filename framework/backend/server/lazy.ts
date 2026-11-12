@@ -1,45 +1,45 @@
-import { Modules } from '../server';
+import { ServerDependencies } from '../server';
 import { LazyServer } from './lazy/server';
 import { LazyConfig } from './lazy/config';
-import { LazyJourney } from './lazy/journey';
+import { LazyFileRouter } from './lazy/file_router';
 import { LazyLogger } from './lazy/logger';
-import { LazyInspector } from './lazy/inspector';
-import { LazySightsee } from './lazy/sightsee';
-import { LazyTrafficOfficer } from './lazy/traffic_officer';
-import { LazySuitcase } from './lazy/suitcase';
+import { LazyRequestClassifier } from './lazy/request_classifier';
+import { LazyContentRenderer } from './lazy/content_renderer';
+import { LazyFileResponseHandler } from './lazy/file_response_handler';
+import { LazyMiddlewareStack } from './lazy/middleware_stack';
 
-export function Lazy(modules: Modules) {
+export function Lazy(dependencies: ServerDependencies) {
   return {
     get server() {
-      return LazyServer(modules);
+      return LazyServer(dependencies);
     },
 
     get config() {
-      return LazyConfig(modules);
+      return LazyConfig(dependencies);
     },
 
-    get journey() {
-      return LazyJourney(modules);
+    get fileRouter() {
+      return LazyFileRouter(dependencies);
     },
 
     get logger() {
-      return LazyLogger(modules);
+      return LazyLogger(dependencies);
     },
 
-    get inspector() {
-      return LazyInspector(modules);
+    get requestClassifier() {
+      return LazyRequestClassifier(dependencies);
     },
 
-    get sightsee() {
-      return LazySightsee(modules);
+    get contentRenderer() {
+      return LazyContentRenderer(dependencies);
     },
 
-    get trafficOfficer() {
-      return LazyTrafficOfficer(modules);
+    get fileResponseHandler() {
+      return LazyFileResponseHandler(dependencies);
     },
 
-    get suitcase() {
-      return LazySuitcase(modules);
+    get middlewareStack() {
+      return LazyMiddlewareStack(dependencies);
     },
   };
 }

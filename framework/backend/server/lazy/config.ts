@@ -1,25 +1,25 @@
-import { Modules } from '../../server';
+import { ServerDependencies } from '../../server';
 
-export function LazyConfig(modules: Modules) {
+export function LazyConfig(dependencies: ServerDependencies) {
   return {
     get host() {
-      return modules.config?.host;
+      return dependencies.config?.host;
     },
 
     get port() {
-      return modules.config?.port;
+      return dependencies.config?.port;
     },
 
     get root() {
-      return modules.config?.root;
+      return dependencies.config?.root;
     },
 
     get allowed() {
-      return modules.config?.allowed;
+      return dependencies.config?.allowed;
     },
 
     get routingType() {
-      return modules.config?.routingType;
+      return dependencies.config?.routingType;
     },
   };
 }

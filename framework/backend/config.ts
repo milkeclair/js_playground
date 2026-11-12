@@ -1,11 +1,11 @@
-import { Journey } from './journey';
+import { FileRouter } from './file_router';
 import type { ServerOptions } from './server';
 
 export function Config({
-  journey,
+  fileRouter,
   configs = {},
 }: {
-  journey: ReturnType<typeof Journey>;
+  fileRouter: ReturnType<typeof FileRouter>;
   configs?: ServerOptions;
 }) {
   const host = configs.host || 'localhost';
@@ -18,7 +18,7 @@ export function Config({
   };
   const routingType = configs.routingType || 'hybrid';
 
-  journey.drawMap({
+  fileRouter.configure({
     routes: {
       '/favicon.ico': `${root}assets/favicon.ico`,
       '/404': `${root}view/404.ejs`,

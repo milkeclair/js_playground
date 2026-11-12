@@ -1,6 +1,6 @@
 import type { IncomingMessage } from 'node:http';
 
-export function Request() {
+export function RequestUtils() {
   return {
     extractIpAddress: (req: IncomingMessage) => {
       const forwarded = req.headers['x-forwarded-for'];

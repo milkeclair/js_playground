@@ -39,11 +39,11 @@ export function InfoLogger({
       logger.info('Goodbye!');
     },
 
-    updatingAllowedRoutes: () => {
+    updatingFileRoutes: () => {
       logger.info('Updating allowed routes...');
     },
 
-    allowedRoutesUpdated: () => {
+    fileRoutesUpdated: () => {
       logger.info('Allowed routes updated.');
     },
 

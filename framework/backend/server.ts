@@ -1,15 +1,15 @@
 import type { RouteDefinition } from './type';
-import { Modules } from './server/modules';
-import { Plane } from './server/plane';
-import { Registrar } from './server/registrar';
-import { Stock } from './suitcase/stock';
+import { createServerDependencies } from './server/dependencies';
+import { HttpServer } from './server/http_server';
+import { RouteRegistrar } from './server/route_registrar';
+import { BuiltinMiddleware } from './middleware_stack/builtin_middleware';
 import { Config } from './config';
-import { Journey } from './journey';
-import { TrafficOfficer } from './traffic_officer';
-import { Sightsee } from './sightsee';
-import { Suitcase } from './suitcase';
+import { FileRouter } from './file_router';
+import { FileResponseHandler } from './file_response_handler';
+import { ContentRenderer } from './content_renderer';
+import { MiddlewareStack } from './middleware_stack';
 import { Logger } from './logger';
-import { Inspector } from './journey/inspector';
+import { RequestClassifier } from './file_router/request_classifier';
 import { Lib } from './lib';
 
 export type ServerOptions = {
@@ -24,33 +24,33 @@ export type ServerOptions = {
   routingType?: 'definitive' | 'filebase' | 'hybrid';
 };
 
-export type Modules = {
+export type ServerDependencies = {
   config: ReturnType<typeof Config>;
-  journey: ReturnType<typeof Journey>;
+  fileRouter: ReturnType<typeof FileRouter>;
   logger: ReturnType<typeof Logger>;
-  inspector: ReturnType<typeof Inspector>;
-  sightsee: ReturnType<typeof Sightsee>;
-  trafficOfficer: ReturnType<typeof TrafficOfficer>;
-  suitcase: ReturnType<typeof Suitcase>;
+  requestClassifier: ReturnType<typeof RequestClassifier>;
+  contentRenderer: ReturnType<typeof ContentRenderer>;
+  fileResponseHandler: ReturnType<typeof FileResponseHandler>;
+  middlewareStack: ReturnType<typeof MiddlewareStack>;
   lib: ReturnType<typeof Lib>;
 };
 
 export function Server(options: ServerOptions = {}) {
   const customRoutes: RouteDefinition[] = [];
 
-  const modules = Modules(options);
-  const plane = Plane({ modules, customRoutes });
-  const registrar = Registrar({ customRoutes });
-  const stock = Stock();
+  const dependencies = createServerDependencies(options);
+  const httpServer = HttpServer({ dependencies, customRoutes });
+  const routeRegistrar = RouteRegistrar({ customRoutes });
+  const builtinMiddleware = BuiltinMiddleware();
 
-  modules.suitcase.put(stock.cors({ config: modules.config, lib: modules.lib }));
-  modules.suitcase.put(stock.methods({ config: modules.config }));
-  modules.suitcase.put(stock.type());
+  dependencies.middlewareStack.use(builtinMiddleware.cors({ config: dependencies.config, lib: dependencies.lib }));
+  dependencies.middlewareStack.use(builtinMiddleware.methods({ config: dependencies.config }));
+  dependencies.middlewareStack.use(builtinMiddleware.type());
 
   return {
-    start: plane.takeOff,
-    modules,
-    use: modules.suitcase.put,
-    ...registrar,
+    start: httpServer.start,
+    dependencies,
+    use: dependencies.middlewareStack.use,
+    ...routeRegistrar,
   };
 }

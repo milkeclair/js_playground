@@ -1,6 +1,6 @@
 import type { RequestHandler, RouteDefinition, HttpMethod } from '../type';
 
-export function Registrar({ customRoutes }: { customRoutes: RouteDefinition[] }) {
+export function RouteRegistrar({ customRoutes }: { customRoutes: RouteDefinition[] }) {
   const METHODS = {
     GET: 'GET',
     POST: 'POST',
